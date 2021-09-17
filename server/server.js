@@ -1,10 +1,13 @@
 const express = require('express');
+const { readdirSync } = require('fs');
 const cors = require('cors');
 const morgan = require('morgan');
 require('dotenv').config
 
+//create express app
 const app = express();
 
+//apply middle ware
 app.use(cors())
 app.use(express.json())
 
@@ -14,9 +17,11 @@ app.use((req, res, next) => {
     next()
 })
 
-app.get('/',(req,res)=>{
-    res.send("Yout hit home page")
-})
+//route
+// app.get('/',(req,res)=>{
+//     res.send("Yout hit home page")
+// })
+readdirSync('./routes').map((r) => app.use('/api',require(`./routes/${r}`)))
 
 const port = process.env.PORT || 8000
 
